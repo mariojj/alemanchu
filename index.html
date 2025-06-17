@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas de Memorización - Alemán</title>
+    <style>
+        /* --- Importación de Fuentes de Google --- */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+        /* --- Estilos Generales y Variables de Color --- */
+        :root {
+            --primary-color: #4a90e2; /* Azul vibrante para interacción */
+            --primary-hover-color: #357abd; /* Azul más oscuro para hover */
+            --background-color: #f4f4f9; /* Gris muy claro para el fondo */
+            --card-background: #ffffff; /* Blanco puro para las tarjetas */
+            --text-color: #333333; /* Gris oscuro para texto principal */
+            --light-text-color: #ffffff; /* Texto blanco */
+            --dark-card-back: #2c3e50; /* Azul oscuro para el reverso de la tarjeta */
+            --shadow: 0 6px 20px rgba(0,0,0,0.08); /* Sombra suave */
+            --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.12); /* Sombra más pronunciada al pasar el ratón */
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2em;
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+        }
+
+        /* --- Contenedor Principal --- */
+        .container {
+            width: 95%;
+            max-width: 1200px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--dark-card-back);
+        }
+
+        /* --- Sección para Añadir Palabras / Importar --- */
+        .content-section {
+            background: var(--card-background);
+            padding: 2.5em;
+            border-radius: 12px;
+            margin-bottom: 3em;
+            box-shadow: var(--shadow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 1.5em;
+            align-items: flex-start;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
+        }
+        
+        .full-width-group {
+            grid-column: 1 / -1;
+        }
+
+        .input-group label,
+        .content-section label {
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 0.3em;
+            display: block;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="file"],
+        .content-section textarea {
+            padding: 0.8em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Lato', sans-serif; /* Ensure textarea uses the same font */
+        }
+        
+        .content-section textarea {
+            min-height: 120px; /* Adecuada altura para el textarea */
+            resize: vertical; /* Permitir redimensionar verticalmente */
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="file"]:focus,
+        .content-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        
+        .input-dual {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            width: 100%;
+        }
+
+        .input-dual input[type="text"] {
+             flex-grow: 1;
+        }
+
+        .input-dual span {
+            font-weight: 700;
+            color: #999;
+        }
+
+        /* --- Botones --- */
+        .action-button {
+            padding: 1em;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--light-text-color);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%; /* Ocupa todo el ancho disponible si es un elemento de bloque */
+            margin-top: 1em;
+        }
+        
+        .form-grid .action-button { /* Específico para el botón dentro del grid */
+             grid-column: 1 / -1;
+        }
+
+
+        .action-button:hover {
+            background-color: var(--primary-hover-color);
+            transform: translateY(-3px); 
+        }
+
+        /* --- Contenedor de las Tarjetas --- */
+        #flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2em;
+            perspective: 1500px; 
+        }
+
+        /* --- Estilos de la Tarjeta Individual --- */
+        .flashcard {
+            min-height: 350px;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.3s;
+        }
+
+        .flashcard:hover .card-face {
+             box-shadow: var(--card-hover-shadow);
+        }
+
+        .card-face-front {
+            background: var(--card-background);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: #eee; 
+        }
+        
+        .card-face-front h3 {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            margin: 0;
+            padding: 1em;
+            font-size: 1.25rem;
+            color: var(--light-text-color);
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .card-face-back {
+            background-color: var(--dark-card-back);
+            color: var(--light-text-color);
+            transform: rotateY(180deg);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .card-face-back h2 {
+            font-size: 2.2rem;
+            margin: 0;
+            padding: 1em;
+            color: var(--light-text-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Tarjetas de Memorización Alemán</h1>
+
+        <!-- SECCIÓN 1: FORMULARIO PARA AÑADIR PALABRA -->
+        <section class="content-section">
+            <h2>Añadir una Palabra Nueva</h2>
+            <form id="add-card-form" class="form-grid">
+                <div class="input-group">
+                    <label for="spanish-word">Palabra en Español</label>
+                    <input type="text" id="spanish-word" required>
+                </div>
+                <div class="input-group">
+                    <label for="german-word">Palabra en Alemán</label>
+                    <input type="text" id="german-word" required>
+                </div>
+
+                <div class="input-group full-width-group">
+                    <label>Imagen Relacionada</label>
+                    <div class="input-dual">
+                        <input type="file" id="word-image" accept="image/*">
+                        <span>O</span>
+                        <input type="text" id="word-image-url" placeholder="Pega una URL de imagen (o Google Drive)">
+                    </div>
+                </div>
+
+                <div class="input-group full-width-group">
+                    <label>Sonido de la Palabra</label>
+                    <div class="input-dual">
+                        <input type="file" id="german-sound" accept="audio/*">
+                        <span>O</span>
+                        <input type="text" id="german-sound-url" placeholder="Pega una URL de audio (o Google Drive)">
+                    </div>
+                </div>
+                
+                <button type="submit" class="action-button">Añadir Tarjeta</button>
+            </form>
+        </section>
+
+        <!-- SECCIÓN 2: IMPORTAR VARIAS TARJETAS -->
+        <section class="content-section">
+            <h2>Añadir Varias Tarjetas (Importar)</h2>
+            <label for="bulk-import-data">Datos de las tarjetas (JSON)</label>
+            <textarea id="bulk-import-data" placeholder='Pega aquí los datos de tus tarjetas en formato JSON. Ejemplo:
+[
+  {
+    "spanish": "Manzana",
+    "german": "Apfel",
+    "image": "https_url_imagen_manzana.jpg",
+    "sound": "https_url_sonido_apfel.mp3"
+  },
+  {
+    "spanish": "Casa",
+    "german": "Haus",
+    "image": "https_url_imagen_casa.png",
+    "sound": "https_url_sonido_haus.m4a"
+  }
+]'></textarea>
+            <button id="import-cards-button" class="action-button">Importar Tarjetas</button>
+        </section>
+
+
+        <!-- SECCIÓN 3: CONTENEDOR DE TARJETAS -->
+        <h2 id="cards-section-title" style="display: none;">Tus Tarjetas</h2>
+        <main id="flashcard-container">
+            <!-- Las tarjetas creadas se insertarán aquí mediante JavaScript -->
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addCardForm = document.getElementById('add-card-form');
+            const cardContainer = document.getElementById('flashcard-container');
+            const cardsSectionTitle = document.getElementById('cards-section-title');
+            const bulkImportDataTextarea = document.getElementById('bulk-import-data');
+            const importCardsButton = document.getElementById('import-cards-button');
+
+            let currentlyPlaying = {
+                audio: null,
+                card: null,
+            };
+
+            // Helper function to transform Google Drive links
+            function getDirectGoogleDriveLink(url) {
+                if (!url || typeof url !== 'string') return url;
+
+                let fileId = null;
+                // Regex for .../file/d/FILE_ID/...
+                let match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                } else {
+                    // Regex for .../uc?id=FILE_ID... or .../open?id=FILE_ID...
+                    match = url.match(/id=([a-zA-Z0-9_-]+)/);
+                    if (match && match[1]) {
+                        fileId = match[1];
+                    }
+                }
+
+                if (fileId) {
+                    return `https://drive.google.com/uc?export=download&id=${fileId}`;
+                }
+                // If it doesn't look like a Drive link that needs transformation, return original
+                // This also handles cases where it might already be a direct uc?export=download link
+                if (url.includes('drive.google.com') && !url.includes('uc?export=download')) {
+                    // It's a Drive link but not one we could parse for a direct ID, or it's a folder.
+                    // It's better to alert the user than to use a potentially broken link.
+                    // However, for bulk import, we might want to be less intrusive.
+                    // For now, if we can't transform it, we'll use it as is, and let image/audio onerror handle it.
+                }
+                return url; 
+            }
+            
+            // Refactored function to create and add a card to the DOM
+            function createAndAddCard(spanishWord, germanWord, imageUrl, soundUrl) {
+                const finalImageSrc = getDirectGoogleDriveLink(imageUrl);
+                const finalSoundSrc = getDirectGoogleDriveLink(soundUrl);
+
+                const audio = new Audio();
+                audio.preload = 'auto'; // Suggest browser to preload
+
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('flashcard');
+                cardElement.setAttribute('aria-label', `Tarjeta: ${spanishWord} / ${germanWord}`);
+
+
+                cardElement.innerHTML = `
+                    <div class="card-face card-face-front">
+                        <img src="${finalImageSrc}" alt="Imagen para ${spanishWord}" class="card-image" 
+                             onerror="this.onerror=null; this.parentElement.innerHTML += '<p style=\\'color:red;text-align:center;padding:10px;\\'>Error al cargar imagen. Verifique URL/permisos.</p>'; this.style.display='none';">
+                        <h3>${spanishWord}</h3>
+                    </div>
+                    <div class="card-face card-face-back">
+                        <h2>${germanWord}</h2>
+                    </div>
+                `;
+
+                cardContainer.appendChild(cardElement);
+
+                if (cardContainer.children.length > 0 && cardsSectionTitle.style.display === 'none') {
+                    cardsSectionTitle.style.display = 'block';
+                }
+
+                cardElement.addEventListener('click', () => {
+                    if (currentlyPlaying.audio && currentlyPlaying.audio !== audio) {
+                        currentlyPlaying.audio.pause();
+                        // Reset previous card if it's different
+                         if (currentlyPlaying.card && currentlyPlaying.card !== cardElement) {
+                           currentlyPlaying.card.classList.remove('is-flipped');
+                        }
+                    } else if (currentlyPlaying.audio === audio && cardElement.classList.contains('is-flipped')) {
+                        // If clicking the same card that is already playing and flipped, pause it.
+                        audio.pause();
+                        // We will toggle flip state below, so don't return here.
+                    }
+
+
+                    cardElement.classList.toggle('is-flipped');
+
+                    if (cardElement.classList.contains('is-flipped')) {
+                        // If trying to play the same audio that was just paused by clicking the same card
+                        if (currentlyPlaying.audio === audio && audio.paused && audio.currentTime > 0) {
+                             // Let it remain paused, user flipped it back.
+                        } else {
+                            // If audio src hasn't been set or changed, set it now.
+                            if(audio.src !== finalSoundSrc) {
+                                audio.src = finalSoundSrc;
+                            }
+                            audio.load(); // Force reload of the audio source
+                            audio.play().then(() => {
+                                // Playback started
+                            }).catch(e => {
+                                console.error("Error al reproducir el audio. Fuente intentada:", audio.src, "Error original:", e);
+                                alert(`Error al reproducir el audio para "${germanWord}".\nFuente: ${audio.src}\nVerifique la URL, los permisos de Google Drive (si aplica) o el formato del audio.\nMensaje: ${e.message}`);
+                            });
+                        }
+                        currentlyPlaying = { audio: audio, card: cardElement };
+                    } else { // Card is flipped back to front
+                        audio.pause();
+                        if (currentlyPlaying.card === cardElement) {
+                           currentlyPlaying = { audio: null, card: null };
+                        }
+                    }
+                });
+            }
+
+
+            // Event listener for single card form
+            addCardForm.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+
+                const spanishWord = document.getElementById('spanish-word').value.trim();
+                const germanWord = document.getElementById('german-word').value.trim();
+                
+                const imageFile = document.getElementById('word-image').files[0];
+                let imageURLValue = document.getElementById('word-image-url').value.trim();
+                
+                const soundFile = document.getElementById('german-sound').files[0];
+                let soundURLValue = document.getElementById('german-sound-url').value.trim();
+                
+                if (!spanishWord || !germanWord) {
+                    alert('Por favor, introduce la palabra en español y en alemán.');
+                    return;
+                }
+                if (!imageFile && !imageURLValue) {
+                    alert('Por favor, proporciona una imagen (sube un fichero o pega una URL).');
+                    return;
+                }
+                if (!soundFile && !soundURLValue) {
+                    alert('Por favor, proporciona un sonido (sube un fichero o pega una URL).');
+                    return;
+                }
+
+                // Prioritize URL if both file and URL are provided
+                const imageSrc = imageURLValue ? imageURLValue : URL.createObjectURL(imageFile);
+                const soundSrc = soundURLValue ? soundURLValue : URL.createObjectURL(soundFile);
+                
+                createAndAddCard(spanishWord, germanWord, imageSrc, soundSrc);
+
+                addCardForm.reset();
+                document.getElementById('word-image-url').value = ''; // Ensure URL fields are also cleared
+                document.getElementById('german-sound-url').value = '';
+            });
+
+            // Event listener for bulk import button
+            importCardsButton.addEventListener('click', () => {
+                const jsonData = bulkImportDataTextarea.value.trim();
+                if (!jsonData) {
+                    alert('Por favor, pega los datos JSON en el área de texto.');
+                    return;
+                }
+
+                let cardsData;
+                try {
+                    cardsData = JSON.parse(jsonData);
+                } catch (error) {
+                    alert(`Error al parsear JSON: ${error.message}\nAsegúrate de que el formato es correcto.`);
+                    return;
+                }
+
+                if (!Array.isArray(cardsData)) {
+                    alert('Error: El JSON debe ser un array de objetos (tarjetas).');
+                    return;
+                }
+
+                let importedCount = 0;
+                let errorCount = 0;
+
+                cardsData.forEach((card, index) => {
+                    if (card && typeof card.spanish === 'string' && card.spanish.trim() !== '' &&
+                        typeof card.german === 'string' && card.german.trim() !== '' &&
+                        typeof card.image === 'string' && card.image.trim() !== '' &&
+                        typeof card.sound === 'string' && card.sound.trim() !== '') {
+                        
+                        createAndAddCard(
+                            card.spanish.trim(), 
+                            card.german.trim(), 
+                            card.image.trim(), 
+                            card.sound.trim()
+                        );
+                        importedCount++;
+                    } else {
+                        console.warn(`Tarjeta ${index + 1} omitida por datos incompletos o incorrectos:`, card);
+                        errorCount++;
+                    }
+                });
+
+                if (importedCount > 0) {
+                    let message = `${importedCount} tarjeta(s) importada(s) correctamente.`;
+                    if (errorCount > 0) {
+                        message += `\n${errorCount} tarjeta(s) fueron omitidas por datos incompletos o formato incorrecto. Revisa la consola para más detalles.`;
+                    }
+                    alert(message);
+                    bulkImportDataTextarea.value = ''; // Clear textarea on success
+                } else if (errorCount > 0) {
+                    alert(`No se importaron tarjetas. ${errorCount} tarjeta(s) tenían datos incompletos o formato incorrecto. Revisa la consola para más detalles y el formato JSON esperado.`);
+                } else {
+                     alert('No se encontraron tarjetas para importar en el JSON proporcionado.');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
