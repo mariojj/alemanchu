@@ -1,50 +1,21 @@
 [
-  {
-    "spanish": "Manzana",
-    "german": "Apfel",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Apfel.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Apfel.mp3"
-  },
-  {
-    "spanish": "Perro",
-    "german": "Hund",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Hund.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Hund.mp3"
-  },
-   {
-    "spanish": "Manzana",
-    "german": "Apfel",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Apfel.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Apfel.mp3"
-  },
-  {
-    "spanish": "Perroo",
-    "german": "Hund",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Hund.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Hund.mp3"
-  },
- {
-    "spanish": "Manzana",
-    "german": "Apfel",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Apfel.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Apfel.mp3"
-  },
-  {
-    "spanish": "Perro",
-    "german": "Hund",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Hund.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Hund.mp3"
-  },
-   {
-    "spanish": "Manzana",
-    "german": "Apfel",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Apfel.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Apfel.mp3"
-  },
-  {
-    "spanish": "Perroo",
-    "german": "Hund",
-    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Hund.png?raw=true",
-    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Hund.mp3"
-  }
+  { "spanish": "Verdura", "german": "Gemüse", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Verdura.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Gemüse.mp3" },
+  { "spanish": "Dinero", "german": "Geld", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Dinero.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Geld.mp3" },
+  { "spanish": "Zapato", "german": "Schuh", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Zapato.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Schuh.mp3" },
+  { "spanish": "Ropa", "german": "Kleidung", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Ropa.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Kleidung.mp3" },
+  { "spanish": "Mesa", "german": "Tisch", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Mesa.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Tisch.mp3" },
+  { "spanish": "Silla", "german": "Stuhl", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Silla.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Stuhl.mp3" },
+  { "spanish": "Ventana", "german": "Fenster", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Ventana.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Fenster.mp3" },
+  { "spanish": "Puerta", "german": "Tür", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Puerta.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Tür.mp3" },
+  { "spanish": "Perro", "german": "Hund", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Perro.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Hund.mp3" },
+  { "spanish": "Gato", "german": "Katze", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Gato.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Katze.mp3" },
+  { "spanish": "Libro", "german": "Buch", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Libro.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Buch.mp3" },
+  { "spanish": "Lápiz", "german": "Bleistift", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Lápiz.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Bleistift.mp3" },
+  { "spanish": "Papel", "german": "Papier", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Papel.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Papier.mp3" },
+  { "spanish": "Cama", "german": "Bett", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Cama.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Bett.mp3" },
+  { "spanish": "Hospital", "german": "Krankenhaus", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Hospital.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Krankenhaus.mp3" },
+  { "spanish": "Policía", "german": "Polizei", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Policía.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Polizei.mp3" },
+  { "spanish": "Calle", "german": "Straße", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Calle.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Straße.mp3" },
+  { "spanish": "Perro", "german": "Hund", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Perro.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Hund.mp3" },
+  { "spanish": "Manzana", "german": "Apfel", "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Manzana.png?raw=true", "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Apfel.mp3" }
 ]

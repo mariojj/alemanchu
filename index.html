@@ -79,7 +79,7 @@
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 0.7s ease-in-out; /* Changed timing function */
         }
 
         .flashcard.is-flipped {
@@ -173,7 +173,7 @@
             };
 
             // --- IMPORTANTE: Reemplaza esta URL con la URL real de tu archivo JSON ---
-            const JSON_DATA_URL = 'https://raw.githubusercontent.com/mariojj/alemanchu/refs/heads/main/arch1.json';
+            const JSON_DATA_URL = 'https://raw.githubusercontent.com/mariojj/alemanchu/refs/heads/main/arch.json';
             // Ejemplo: const JSON_DATA_URL = 'https://api.npoint.io/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
             // Ejemplo local (requiere un servidor local): const JSON_DATA_URL = '/data/cards.json';
 
@@ -217,35 +217,48 @@
                            currentlyPlaying.card.classList.remove('is-flipped');
                         }
                     } else if (currentlyPlaying.audio === audio && cardElement.classList.contains('is-flipped')) {
-                        audio.pause();
+                        // If clicking the already playing (and flipped) card, we effectively want to pause.
+                        // However, the subsequent logic will flip it back and pause anyway.
+                        // No specific action needed here if we allow it to flip back.
                     }
 
                     cardElement.classList.toggle('is-flipped');
 
                     if (cardElement.classList.contains('is-flipped')) {
-                        if (currentlyPlaying.audio === audio && audio.paused && audio.currentTime > 0) {
-                            // Let it remain paused if user flipped it back
-                        } else {
+                        // Play sound only if it's not the currently playing audio or if it was paused
+                        if (currentlyPlaying.audio !== audio || audio.paused) {
                             if(audio.src !== finalSoundSrc) {
                                 audio.src = finalSoundSrc;
+                                audio.load(); // Load new source
+                            } else {
+                                // If src is the same, ensure we are at the beginning if re-playing
+                                audio.currentTime = 0; 
                             }
-                            audio.load();
+                            
                             audio.play().then(() => {
                                 // Playback started
                             }).catch(e => {
                                 console.error("Error al reproducir el audio. Fuente:", audio.src, "Error:", e);
-                                // Simple alert for audio error, could be improved with on-card error message
                                 alert(`Error al reproducir audio para "${germanWord}".\nFuente: ${audio.src}\nVerifique la URL y el formato del audio.\nMensaje: ${e.message}`);
                             });
                         }
                         currentlyPlaying = { audio: audio, card: cardElement };
                     } else { // Card is flipped back to front
                         audio.pause();
+                        // Reset currentlyPlaying if this was the active card
                         if (currentlyPlaying.card === cardElement) {
                            currentlyPlaying = { audio: null, card: null };
                         }
                     }
                 });
+            }
+
+            // Función para barajar un array (Fisher-Yates shuffle)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]]; // Intercambio de elementos
+                }
             }
 
             async function loadCardsFromUrl(url) {
@@ -255,7 +268,10 @@
                 }
                 
                 try {
-                    const response = await fetch(url);
+                    loadingMessage.style.display = 'block';
+                    errorMessageDiv.style.display = 'none';
+
+                    const response = await fetch(url, { cache: "no-store" }); // Added no-store to try and prevent caching
                     if (!response.ok) {
                         throw new Error(`Error de red al cargar JSON: ${response.status} ${response.statusText}`);
                     }
@@ -264,6 +280,9 @@
                     if (!Array.isArray(cardsData)) {
                         throw new Error('Error: El JSON debe ser un array de objetos (tarjetas).');
                     }
+
+                    // Barajar las tarjetas antes de mostrarlas
+                    shuffleArray(cardsData);
 
                     let importedCount = 0;
                     let errorInCardData = 0;
@@ -282,17 +301,24 @@
                             );
                             importedCount++;
                         } else {
-                            console.warn(`Tarjeta ${index + 1} omitida por datos incompletos o incorrectos:`, card);
+                            console.warn(`Tarjeta ${index + 1} (después de barajar) omitida por datos incompletos o incorrectos:`, card);
                             errorInCardData++;
                         }
                     });
+                    
+                    loadingMessage.style.display = 'none';
 
                     if (importedCount > 0) {
                         cardsSectionTitle.style.display = 'block';
-                        loadingMessage.style.display = 'none';
                         console.log(`${importedCount} tarjeta(s) cargada(s) correctamente.`);
                         if (errorInCardData > 0) {
-                            alert(`${errorInCardData} tarjeta(s) fueron omitidas por datos incompletos o formato incorrecto en el JSON. Revisa la consola para más detalles.`);
+                            // Display a less intrusive message for partial import errors
+                            const partialErrorMsg = `${errorInCardData} tarjeta(s) fueron omitidas por datos incompletos o formato incorrecto en el JSON. Revisa la consola para más detalles.`;
+                            errorMessageDiv.textContent = partialErrorMsg;
+                            errorMessageDiv.style.backgroundColor = '#fff3cd'; // A light yellow for warnings
+                            errorMessageDiv.style.color = '#856404';
+                            errorMessageDiv.style.borderColor = '#ffeeba';
+                            errorMessageDiv.style.display = 'block';
                         }
                     } else if (cardsData.length === 0) {
                          displayError('No se encontraron tarjetas en el archivo JSON proporcionado, o el archivo está vacío.');
@@ -300,8 +326,8 @@
                     else if (errorInCardData > 0 && importedCount === 0) {
                         displayError(`No se cargaron tarjetas. Todas las ${errorInCardData} entradas en el JSON tenían datos incompletos o formato incorrecto. Revisa la consola y el formato JSON esperado.`);
                     }
-                     else {
-                         displayError('No se encontraron tarjetas válidas para importar en el JSON proporcionado.');
+                     else { // Should not be reached if cardsData.length > 0 and importedCount === 0 without errorInCardData > 0
+                         displayError('No se encontraron tarjetas válidas para importar en el JSON proporcionado, o el formato del JSON es incorrecto.');
                     }
 
                 } catch (error) {
