@@ -1,0 +1,14 @@
+[
+  {
+    "spanish": "Manzana",
+    "german": "Apfel",
+    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Apfel.png?raw=true",
+    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Apfel.mp3"
+  },
+  {
+    "spanish": "Perro",
+    "german": "Hund",
+    "image": "https://github.com/mariojj/alemanchu/blob/main/A1/Imagen/Hund.png?raw=true",
+    "sound": "https://github.com/mariojj/alemanchu/raw/refs/heads/main/A1/Audio/Hund.mp3"
+  }
+]
